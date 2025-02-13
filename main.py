@@ -1,6 +1,6 @@
 import tensorflow as tf
 from tensorflow.keras import Sequential
-from tensorflow.keras.layers import Dense, Flatten
+from tensorflow.keras.layers import Dense, Flatten, Dropout
 from tensorflow.keras.datasets import mnist
 import numpy as np
 import matplotlib.pyplot as plt
@@ -19,6 +19,7 @@ print("Taille des labels :", y_train.shape)
 # Créer le modèle
 model = Sequential([
     Flatten(input_shape=(28, 28)),  # Couche d'entrée : transforme l'image 28x28 en vecteur 1D
+    Dense(256, activation='relu'),  # Couche cachée : 256 neurones avec activation ReLU
     Dense(128, activation='relu'),  # Couche cachée : 128 neurones avec activation ReLU
     Dense(10, activation='softmax')  # Couche de sortie : 10 neurones pour les 10 classes (0 à 9)
 ])
@@ -31,6 +32,8 @@ model.compile(optimizer='adam',  # Optimiseur pour ajuster les poids
 # Entraîner le modèle
 print("Entraînement du modèle...")
 model.fit(x_train, y_train, epochs=5, validation_data=(x_test, y_test))  # Entraînement pendant 5 époques
+
+#model.save("mnist_model.h5")
 
 # Évaluer le modèle sur les données de test
 test_loss, test_accuracy = model.evaluate(x_test, y_test, verbose=2)
